@@ -4,6 +4,7 @@ from pathlib import Path
 
 PATH_DO_TXT = 'data\measurements.txt'
 
+#Função que carrega a base, agrupa e ordena
 def processar_temperaturas(path_do_txt: Path):
 
     print('Iniciando o processamento dos dados')

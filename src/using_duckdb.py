@@ -2,7 +2,7 @@ import duckdb as db
 import time
 
 
-
+#Cria a consulta na base utilizando o DuckDB
 def duckdb_consulta():
     db.sql(""" SELECT station,
         MIN(temperature) as temp_min,
