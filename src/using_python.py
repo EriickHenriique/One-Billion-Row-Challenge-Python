@@ -42,7 +42,6 @@ def processar_temperaturas(path_do_txt: Path):
     return formatted_results
 
 
-
 if __name__ == '__main__':
     path_do_text: Path = PATH_DO_TXT
     resultados = processar_temperaturas(path_do_text)
