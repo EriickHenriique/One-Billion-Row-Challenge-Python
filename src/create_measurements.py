@@ -75,7 +75,7 @@ def contrucao_arquivo(estacoes, linhas_a_criar):
             for s in range(0,linhas_a_criar // linhas_tamanho):
                 
                 batch = random.choices(nomes_estacoes, k=linhas_tamanho)
-                prepped_deviated_batch = '\n'.join([f"{estacao};{random.uniform(temp_frio, temp_quente):.1f}" for estacao in batch]) # :.1f should quicker than round on a large scale, because round utilizes mathematical operation
+                prepped_deviated_batch = '\n'.join([f"{estacao};{random.uniform(temp_frio, temp_quente):.1f}" for estacao in batch]) 
                 file.write(prepped_deviated_batch + '\n')
                 
         sys.stdout.write('\n')
@@ -94,7 +94,7 @@ def contrucao_arquivo(estacoes, linhas_a_criar):
     print(f"Tempo decorrido: {tempo_formatado(tempo_total)}")
 
 def main():
-    linhas_a_criar = 1000000
+    linhas_a_criar = 100_000_000
     estacoes = []
     estacoes = NomeEstacoes()
     print(tamanho_arquivo_estimado(estacoes, linhas_a_criar))
