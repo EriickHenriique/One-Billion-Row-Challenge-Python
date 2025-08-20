@@ -2,7 +2,6 @@ import os
 import time
 import random
 import sys
-from datetime import timedelta
 
 
 #Separa o nome das Cidades
@@ -45,7 +44,7 @@ def tamanho_arquivo_estimado(estacoes, linhas_a_criar):
     """
     max_string = float('-inf')
     min_string = float('inf')
-    per_record_size = 0
+    tamanho = 0
     record_size_unit = "bytes"
 
     for estacao in estacoes:
@@ -53,13 +52,64 @@ def tamanho_arquivo_estimado(estacoes, linhas_a_criar):
             max_string = len(estacao)
         if len(estacao) < min_string:
             min_string = len(estacao)
-        per_record_size = ((max_string + min_string * 2) + len(",-123.4")) / 2
+        tamanho = ((max_string + min_string * 2) + len(",-123.4")) / 2
 
-    tamanho_arquivo = linhas_a_criar * per_record_size
+    tamanho_arquivo = linhas_a_criar * tamanho
     human_file_size = conversao_bytes(tamanho_arquivo)
 
     return f"O tamanho estimado do arquivo é:  {human_file_size}.\nO tamanho final será provavelmente muito menor (metade)."
 
+
+
+def contrucao_arquivo(estacoes, linhas_a_criar):
+    """
+    Generates and writes to file the requested length of test data
+    """
+    inicio = time.time()
+    temp_frio = -99.9
+    temp_quente = 99.9
+    nomes_estacoes = random.choices(estacoes, k=10_000)
+    linhas_tamanho = 10000 # instead of writing line by line to file, process a batch of stations and put it to disk
+    print('Criando o arquivo... isso vai demorar uns 10 minutos...')
+
+    try:
+        with open("./data/measurements.txt", 'w', encoding="utf-8") as file:
+            for s in range(0,linhas_a_criar // linhas_tamanho):
+                
+                batch = random.choices(nomes_estacoes, k=linhas_tamanho)
+                prepped_deviated_batch = '\n'.join([f"{estacao};{random.uniform(temp_frio, temp_quente):.1f}" for estacao in batch]) # :.1f should quicker than round on a large scale, because round utilizes mathematical operation
+                file.write(prepped_deviated_batch + '\n')
+                
+        sys.stdout.write('\n')
+    except Exception as e:
+        print("Something went wrong. Printing error info and exiting...")
+        print(e)
+        exit()
+    
+    fim = time.time()
+    tempo_total = fim - inicio
+    tamanho_do_arquivo = os.path.getsize("./data/measurements.txt")
+    human_file_size = conversao_bytes(tamanho_do_arquivo)
+ 
+    print("Arquivo escrito com sucesso data/measurements.txt")
+    print(f"Tamanho final:  {human_file_size}")
+    print(f"Tempo decorrido: {tempo_formatado(tempo_total)}")
+
+def main():
+    """
+    main program function
+    """
+    linhas_a_criar = 1000000
+    estacoes = []
+    estacoes = NomeEstacoes()
+    print(tamanho_arquivo_estimado(estacoes, linhas_a_criar))
+    contrucao_arquivo(estacoes, linhas_a_criar)
+    print("Arquivo de teste finalizado.")
+
+
+if __name__ == "__main__":
+    main()
+exit()
 
 
 
