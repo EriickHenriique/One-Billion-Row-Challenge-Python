@@ -23,6 +23,8 @@ def conversao_bytes(num):
             return "%3.1f %s" % (num, x)
         num /= 1024.0
 
+
+# Formata os segundos para a formatação de tempo correta.
 def tempo_formatado(segundos):
     if segundos < 60:
         return f"{segundos:.3f} segundos"
@@ -38,14 +40,12 @@ def tempo_formatado(segundos):
             return f"{int(horas)} horas {int(minutos)} minutos {int(segundos)} segundos"
 
 
+# Estima o tamanho do arquivo
 def tamanho_arquivo_estimado(estacoes, linhas_a_criar):
-    """
-    Tries to estimate how large a file the test data will be
-    """
+
     max_string = float('-inf')
     min_string = float('inf')
     tamanho = 0
-    record_size_unit = "bytes"
 
     for estacao in estacoes:
         if len(estacao) > max_string:
@@ -60,16 +60,14 @@ def tamanho_arquivo_estimado(estacoes, linhas_a_criar):
     return f"O tamanho estimado do arquivo é:  {human_file_size}.\nO tamanho final será provavelmente muito menor (metade)."
 
 
-
+# Gera e Preenche o arquivo com o tamanho de linhas pré-definidas
 def contrucao_arquivo(estacoes, linhas_a_criar):
-    """
-    Generates and writes to file the requested length of test data
-    """
+
     inicio = time.time()
     temp_frio = -99.9
     temp_quente = 99.9
     nomes_estacoes = random.choices(estacoes, k=10_000)
-    linhas_tamanho = 10000 # instead of writing line by line to file, process a batch of stations and put it to disk
+    linhas_tamanho = 10000 
     print('Criando o arquivo... isso vai demorar uns 10 minutos...')
 
     try:
@@ -96,9 +94,6 @@ def contrucao_arquivo(estacoes, linhas_a_criar):
     print(f"Tempo decorrido: {tempo_formatado(tempo_total)}")
 
 def main():
-    """
-    main program function
-    """
     linhas_a_criar = 1000000
     estacoes = []
     estacoes = NomeEstacoes()
